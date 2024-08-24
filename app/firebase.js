@@ -1,4 +1,4 @@
-// Import the functions you need from the SDKs you need
+import { useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAnalytics } from 'firebase/analytics';
@@ -14,9 +14,20 @@ const firebaseConfig = {
   measurementId: "G-Y7PDJYW01N"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const analytics = getAnalytics(app);
+let app;
+let db;
+let analytics;
 
-export { db };
+export const useFirebase = () => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    // Initialize Firebase
+    app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    analytics = getAnalytics(app);
+  }, []);
+
+  return { isClient, db, analytics };
+};
